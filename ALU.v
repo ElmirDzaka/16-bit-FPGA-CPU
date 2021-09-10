@@ -46,7 +46,7 @@ always @(r1, r2, opcode)
 						flag[2] = 1;
 					end
 					else begin
-						flag[2] = 0;
+						flag[2] = 0; //comment
 					end
 				end
 				else begin
