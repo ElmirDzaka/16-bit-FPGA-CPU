@@ -11,6 +11,7 @@ always @(r1, r2, opcode)
 	begin 
 		case(opcode)
 			8'b00000101 : begin
+			flag = 7'b0000000;
 				{flag[0], rout} = r1 + r2;
 				//rout = r1 + r2;//add
 				if(r2[15] == r1[15] && rout[15] != r1[15]) begin
@@ -23,8 +24,9 @@ always @(r1, r2, opcode)
 			 end 
          8'b00000110 : rout = r1 + r2; //addu
          8'b00000111 : rout = r1 + r2 + flag[0]; //addc
-        // 8'b00001110 : rout = r1 * r2;//mult
+      // 8'b00001110 : rout = r1 * r2;//mult
          8'b00001001 : begin
+			flag = 7'b0000000;
 				{flag[0],rout} = r1 + (~r2 + 1); //sub
 				
 				if((~r2[15] + 1) == r1[15] && rout[15] != r1[15]) begin
@@ -37,6 +39,7 @@ always @(r1, r2, opcode)
          //8'b00001010 : rout = r1 - r2; //subc
 			
          8'b00001011 : begin //cmp
+				flag = 7'b0000000;
 //				rout = r1 - r2;
 //				if(rout == 0 ) begin
 //					flag[6] = 1;
