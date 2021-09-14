@@ -25,9 +25,9 @@ always @(r1, r2, opcode)
          8'b00000111 : rout = r1 + r2 + flag[0]; //addc
         // 8'b00001110 : rout = r1 * r2;//mult
          8'b00001001 : begin
-				{flag[0],rout} = r1 + ~r2; //sub
+				{flag[0],rout} = r1 + -r2; //sub
 				
-				if(~r2[15] == r1[15] && rout[15] != r1[15]) begin
+				if(-r2[15] == r1[15] && rout[15] != r1[15]) begin
 					flag[5] = 1;	
 				end	
 					else begin
