@@ -4,7 +4,7 @@ input [15:0] r1;
 input [15:0] r2;
 output reg [15:0] rout;
 input [7:0] opcode;
-reg [7:0] flag; //C == 0, L == 2, F == 5(OF), Z == 6, N == 7
+reg [7:0] flag = 7'b0000000; //C == 0, L == 2, F == 5(OF), Z == 6, N == 7
 
 
 always @(r1, r2, opcode)
@@ -25,9 +25,9 @@ always @(r1, r2, opcode)
          8'b00000111 : rout = r1 + r2 + flag[0]; //addc
         // 8'b00001110 : rout = r1 * r2;//mult
          8'b00001001 : begin
-				{flag[0],rout} = r1 + -r2; //sub
+				{flag[0],rout} = r1 + (~r2 + 1); //sub
 				
-				if(-r2[15] == r1[15] && rout[15] != r1[15]) begin
+				if((~r2[15] + 1) == r1[15] && rout[15] != r1[15]) begin
 					flag[5] = 1;	
 				end	
 					else begin
