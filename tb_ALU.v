@@ -21,6 +21,7 @@ module tb_ALU;
         tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00000101;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
+				//$display("opcode = ", tb_opcode);
             
         //addu
         tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00000110;
@@ -31,6 +32,17 @@ module tb_ALU;
         tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00000111;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
+			
+			 //Add unsigned overflow
+        tb_r1 = 65535; tb_r2 = 1; tb_opcode = 8'b00000101;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", rout_out);
+			
+			 //Add carrybit
+        tb_r1 = 32767; tb_r2 = 1; tb_opcode = 8'b00000101;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", rout_out);
+			
             
 //        //mult
 //        tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00001110;
@@ -42,6 +54,16 @@ module tb_ALU;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
             
+			 //sub unsigned overflow
+        tb_r1 = 1; tb_r2 = 2; tb_opcode = 8'b00001001;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", rout_out);
+			
+		 //sub carrybit
+        tb_r1 = 1; tb_r2 = -1; tb_opcode = 8'b00001001;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", rout_out);	
+				
 //        //subc
 //        tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00001010;
 //        #20 //wait 20 seconds
@@ -52,6 +74,16 @@ module tb_ALU;
         tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00001011;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
+				
+		  //cmp unsigned
+        tb_r1 = 1; tb_r2 = 2; tb_opcode = 8'b00001011;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", rout_out);
+			
+			//cmp signed
+        tb_r1 = -1; tb_r2 = 2; tb_opcode = 8'b00001011;
+        #20 //wait 20 seconds
+            $display("1.", "rout = ", $signed(rout_out));
             
             
         //and
@@ -95,6 +127,9 @@ module tb_ALU;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
         
+		  
+		  
+		  
             //testing add
 //        for(i=0; i< 65535; i=i+1) 
 //            begin

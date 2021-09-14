@@ -37,24 +37,51 @@ always @(r1, r2, opcode)
          //8'b00001010 : rout = r1 - r2; //subc
 			
          8'b00001011 : begin //cmp
+//				rout = r1 - r2;
+//				if(rout == 0 ) begin
+//					flag[6] = 1;
+//				end 
+//				else begin
+//					flag[6] = 0;
+//				end
+//			//	if(r1 > 0 && r2 > 0) begin
+//				if(rout < r1) begin 
+//					flag[2] = 1;
+//					end
+//				else begin
+//					flag[2] = 0; //comment
+//					end
+//		//		end
+//			//	else if ($signed(r1) && $signed(r2))begin
+//				if($signed(rout) < $signed(r1)) begin
+//					flag[7] = 1;
+//				end 
+//				else begin
+//					flag[7] = 0;
+//					end
+//			//	end
 				rout = r1 - r2;
-				if(rout == 0 ) begin
-					flag[6] = 1;
-				end 
-				else if($unsigned(r1) && $unsigned(r2)) begin
-					if(rout > r1) begin 
-						flag[2] = 1;
-					end
-					else begin
-						flag[2] = 0; //comment
-					end
-				end
-				else begin
-					if(rout > 0) begin
+				
+				if(r1 == r2) begin 
 						flag[6] = 1;
-					end 
+				end
+		   	else begin
+					flag[6] = 0;
+					if(($signed(r1) < 0 || $signed(r2) < 0) || ($signed(r1) < 0 && $signed(r2) < 0)) begin			
+						if($signed(rout) < $signed(r2)) begin
+							flag[7] = 1;
+						end
+						else begin
+							flag[7] = 0;
+						end
+					end
 					else begin
-						flag[6] = 0;
+						if($signed(rout) < $signed(r2)) begin
+							flag[2] = 1;
+						end
+						else begin
+							flag[2] = 0;
+						end
 					end
 				end
 			end
