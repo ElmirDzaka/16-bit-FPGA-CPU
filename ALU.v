@@ -1,19 +1,19 @@
 module ALU(r1, r2, rout, opcode);
 
-input [15:0] r1;
+
+input [15:0] r1; 
 input [15:0] r2;
+
 output reg [15:0] rout;
 input [7:0] opcode;
 reg [7:0] flag = 7'b0000000; //C == 0, L == 2, F == 5(OF), Z == 6, N == 7
-
 
 always @(r1, r2, opcode)
 	begin 
 		case(opcode)
 			8'b00000101 : begin
-			flag = 7'b0000000;
+			flag = 7'b0000000; //add
 				{flag[0], rout} = r1 + r2;
-				//rout = r1 + r2;//add
 				if(r2[15] == r1[15] && rout[15] != r1[15]) begin
 					flag[5] = 1;	
 				end	
@@ -24,7 +24,6 @@ always @(r1, r2, opcode)
 			 end 
          8'b00000110 : rout = r1 + r2; //addu
          8'b00000111 : rout = r1 + r2 + flag[0]; //addc
-      // 8'b00001110 : rout = r1 * r2;//mult
          8'b00001001 : begin
 			flag = 7'b0000000;
 				{flag[0],rout} = r1 + (~r2 + 1); //sub
@@ -36,33 +35,10 @@ always @(r1, r2, opcode)
 						flag[5] = 0;
 					end
 			end
-         //8'b00001010 : rout = r1 - r2; //subc
 			
          8'b00001011 : begin //cmp
 				flag = 7'b0000000;
-//				rout = r1 - r2;
-//				if(rout == 0 ) begin
-//					flag[6] = 1;
-//				end 
-//				else begin
-//					flag[6] = 0;
-//				end
-//			//	if(r1 > 0 && r2 > 0) begin
-//				if(rout < r1) begin 
-//					flag[2] = 1;
-//					end
-//				else begin
-//					flag[2] = 0; //comment
-//					end
-//		//		end
-//			//	else if ($signed(r1) && $signed(r2))begin
-//				if($signed(rout) < $signed(r1)) begin
-//					flag[7] = 1;
-//				end 
-//				else begin
-//					flag[7] = 0;
-//					end
-//			//	end
+
 				rout = r1 - r2;
 				
 				if(r1 == r2) begin 
