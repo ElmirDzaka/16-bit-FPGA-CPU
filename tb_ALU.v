@@ -50,7 +50,7 @@ module tb_ALU;
 //            $display("1.", "rout = ", rout_out);
             
         //sub
-        tb_r1 = 1; tb_r2 = 1; tb_opcode = 8'b00001001;
+        tb_r1 = 2; tb_r2 = 3; tb_opcode = 8'b00001001;
         #20 //wait 20 seconds
             $display("1.", "rout = ", rout_out);
             
