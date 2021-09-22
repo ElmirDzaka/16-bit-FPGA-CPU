@@ -3,15 +3,13 @@ module ALUDataPath(immediate, buff_en, clk, enable, reset, control1, control2, i
 input clk;
 input reset;
 input [15:0] enable; //15'b0000000000011
-input control1;
-input control2;
+input [4:0] control1;
+input [4:0] control2;
 input imm_control;
 input[7:0] opcode;
 input [15:0] immediate;
 input buff_en;
 
-wire [15:0] bus1;
-wire [15:0] bus2;
 wire [15:0] mux1_wire;
 wire [15:0] mux2_wire;
 wire [15:0] mux3_wire;
