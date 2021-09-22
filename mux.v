@@ -1,7 +1,6 @@
-module mux(bus, control, out, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15);
+module mux(control, out, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15);
 
-input [15:0] bus;
-input control [4:0]; // 5 bits to account for all the regs and to wait
+input [4:0] control ; // 5 bits to account for all the regs and to wait
 input [15:0] r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15;
 
 output reg [15:0] out;
@@ -21,7 +20,7 @@ output reg [15:0] out;
 
 always @(control) begin
 	case(control)
-		5'b00000:       // Wait condition, might throw errors
+		5'b00000:;       // Wait condition, might throw errors
 		5'b00001: out = r0;
 		5'b00010: out = r1;
 		5'b00011: out = r2;
@@ -38,6 +37,7 @@ always @(control) begin
 		5'b01110: out = r13;
 		5'b01111: out = r14;
 		5'b10000: out = r15;
+		endcase
 
 end
 endmodule

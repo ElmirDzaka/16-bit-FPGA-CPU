@@ -1,26 +1,60 @@
-module ALUDataPath(data, clk, enable, reset);
+module ALUDataPath(immediate, buff_en, clk, enable, reset, control1, control2, imm_control, opcode);
 
 input clk;
-input reset
-input [15:0] data;
+input reset;
 input [15:0] enable; //15'b0000000000011
 input control1;
 input control2;
+input imm_control;
+input[7:0] opcode;
+input [15:0] immediate;
+input buff_en;
+
 wire [15:0] bus1;
 wire [15:0] bus2;
 wire [15:0] mux1_wire;
 wire [15:0] mux2_wire;
+wire [15:0] mux3_wire;
 wire [15:0] alu_out;
+wire [15:0] buff_out;
+
+wire [15:0] r0_wire;
+wire [15:0] r1_wire;
+wire [15:0] r2_wire;
+wire [15:0] r3_wire;
+wire [15:0] r4_wire;
+wire [15:0] r5_wire;
+wire [15:0] r6_wire;
+wire [15:0] r7_wire;
+wire [15:0] r8_wire;
+wire [15:0] r9_wire;
+wire [15:0] r10_wire;
+wire [15:0] r11_wire;
+wire [15:0] r12_wire;
+wire [15:0] r13_wire;
+wire [15:0] r14_wire;
+wire [15:0] r15_wire;
 
 
 
-RegBank RegBank0(.ALUBus(alu_out), r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15, .regEnable(enable), .clk(clk), .reset(reset));
+//regbank
+RegBank RegBank0(.ALUBus(buff_out), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire), .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire), .regEnable(enable), .clk(clk), .reset(reset));
 
+//mux1
+mux mux1(.control(control1), .out(mux1_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire)
+, .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire));
 
-mux mux1(.r0(r0), .r1(r1), .r2(r2), .r3(r3), .r4(r4), .r5(r5), .r6(r6), .r7(r7), .r8(r8), .r9(r9), .r10(r10)
-, .r11(r11), .r12(r12), .r13(r13), .r14(r14), .r15(r15), .bus(alu_out), .control(control1), .out(mux1_wire));
-mux mux2(.bus(bus2), .control(control2), .out(mux2_wire));
+//mux2
+mux mux2(.control(control2), .out(mux2_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire)
+, .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire));
 
-ALU alu(.r1(mux1_wire), .r2(mux2_wire), .rout(alu_out), opcode);
+//immediate mux
+imm_mux mux3(.immediate(immediate),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
+
+//ALU
+ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(alu_out), .opcode(opcode));
+
+//tristatebuffer
+tristatebuffer tristatebuffer(.inp(alu_out), .en(buff_en), .out(buff_out));
 
 endmodule
