@@ -20,7 +20,7 @@ output reg [15:0] out;
 
 always @(control) begin
 	case(control)
-		5'b00000:;       // Wait condition, might throw errors
+		5'b00000: out = 16'bx;       // Wait condition, might throw errors
 		5'b00001: out = r0;
 		5'b00010: out = r1;
 		5'b00011: out = r2;
@@ -37,6 +37,7 @@ always @(control) begin
 		5'b01110: out = r13;
 		5'b01111: out = r14;
 		5'b10000: out = r15;
+		default: out = 16'bx; 
 		endcase
 
 end

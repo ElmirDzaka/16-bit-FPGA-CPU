@@ -1,4 +1,4 @@
-module ALUDataPath(immediate, buff_en, clk, enable, reset, control1, control2, imm_control, opcode);
+module ALUDataPath(immediate, buff_en, clk, enable, reset, control1, control2, imm_control, opcode, out);
 
 input clk;
 input reset;
@@ -9,6 +9,7 @@ input imm_control;
 input[7:0] opcode;
 input [15:0] immediate;
 input buff_en;
+output out;
 
 wire [15:0] mux1_wire;
 wire [15:0] mux2_wire;
@@ -50,9 +51,9 @@ mux mux2(.control(control2), .out(mux2_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2
 imm_mux mux3(.immediate(immediate),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
 
 //ALU
-ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(alu_out), .opcode(opcode));
+ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(out), .opcode(opcode));
 
 //tristatebuffer
-tristatebuffer tristatebuffer(.inp(alu_out), .en(buff_en), .out(buff_out));
+tristatebuffer tristatebuffer1(.inp(out), .en(buff_en), .out(buff_out));
 
 endmodule

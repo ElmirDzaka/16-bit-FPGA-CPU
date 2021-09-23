@@ -1,4 +1,4 @@
-module ALU(r1, r2, rout, opcode);
+module ALU(r1, r2, rout, opcode); //make sure all flags are defined in all cases
 
 
 input [15:0] r1; 
@@ -8,7 +8,7 @@ output reg [15:0] rout;
 input [7:0] opcode;
 reg [7:0] flag = 8'b00000000; //C == 0, L == 2, F == 5(OF), Z == 6, N == 7
 
-always @(r1, r2, opcode)
+always @(r1, r2, opcode) // maybe remove r1 and r2
 	begin 
 		case(opcode)
 			8'b00000101 : begin
@@ -19,8 +19,7 @@ always @(r1, r2, opcode)
 				end	
 					else begin
 						flag = 8'b00100000;
-					end
-			
+					end		
 			 end 
          8'b00000110 : rout = r1 + r2; //addu
          8'b00000111 : rout = r1 + r2 + flag[0]; //addc
@@ -72,6 +71,7 @@ always @(r1, r2, opcode)
          8'b00001100 : rout = r2 <<< r1;//alsh
 			8'b00001111 : rout = r2 >>> r1;//arsh
 			8'b00000100 : rout = ~r1; //not
+			default: rout = 16'bx;
 		endcase
 	end
 endmodule

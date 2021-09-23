@@ -2,79 +2,34 @@
 
 module tb_datapath;
 
-reg [15:0] immediate;
-reg buff_en;
-reg clk;
-reg [15:0]enable;
-reg reset;
-reg [4:0]control1;
-reg [4:0]control2;
-reg imm_control;
-reg [7:0]opcode;
-
-ALUDataPath tes1(.immediate(immediate), .buff_en(buff_en), .clk(clk), .enable(enable), .reset(reset), .control1(control1), .control2(control2), .imm_control(imm_control), .opcode(opcode));
-
-initial begin
- 
- clk = 0;
- 
- #10
- 
- clk = 1;
- 
- #10
- 
- clk = 0;
- 
- #10
- //Reset all enables to 0;
- 
- buff_en = 0;
- enable = 16'b0000000000000000;
- reset = 0;
- control1 = 5'b00000;
- control2 = 5'b00000;
- imm_control = 0;
- opcode = 8'b00000000;
- immediate = 16'b0000000000000000;
- 
- #10 //load immediate to alu 
- 
- buff_en = 0;
- enable = 16'b0000000000000000;
- reset = 0;
- control1 = 5'b00000;
- control2 = 5'b00000;
- imm_control = 1;
- opcode = 0;
- immediate = 16'b0000000000000000;
- 
-  #10 //load reg0 to alu 
- 
- buff_en = 0;
- enable = 16'b0000000000000000;
- reset = 0;
- control1 = 5'b00001;
- control2 = 5'b00000;
- imm_control = 0;
- opcode = 0;
- immediate = 16'b0000000000000000;
- 
- 
- #10 //give alu opcode and output computation 
- 
- buff_en = 1;
- enable = 16'b0000000000000001;
- reset = 0;
- control1 = 5'b00000;
- control2 = 5'b00000;
- imm_control = 0;
- opcode = 8'b00000001;
- immediate = 16'b0000000000000000;
- 
-end
-always #10 clk = ~clk;
- 
-
+//wire [15:0] immediate_test;
+//wire buff_en_test;
+//reg clk;
+//wire [15:0]enable_test;
+//reg reset;
+//wire [4:0]control1_test;
+//wire [4:0]control2_test;
+//wire imm_control_test;
+//wire [7:0]opcode_test;
+//
+//fsm_sum tes2(.clk(clk), .reset(reset), .immediate(immediate_test), .buff_en(buff_en_test), .enable(enable_test), .control1(control1_test), .control2(control2_test), .imm_control(imm_control_test), .opcode(opcode_test));
+//ALUDataPath tes1(.immediate(immediate_test), .buff_en(buff_en_test), .clk(clk), .enable(enable_test), .reset(reset), .control1(control1_test), .control2(control2_test), .imm_control(imm_control_test), .opcode(opcode_test));
+//
+//initial begin
+// clk = 0;
+// reset = 1;
+// 
+// #10
+// 
+// reset = 0;
+// 
+// #10
+// 
+// reset = 1;
+//
+//end
+//always #10 clk = ~clk;
+// 
+//
 
 endmodule
