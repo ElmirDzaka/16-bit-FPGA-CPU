@@ -1,136 +1,81 @@
-module fsm_sum(clk, reset, immediate, buff_en, enable, control1, control2, imm_control, opcode);
-input clk, reset;
+// Module for the Fibonacci sequence
+// Created by Louis J. Cerda on 9/23/2021
+// Fibonacci sequnce for reference
+// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
 
-output reg [15:0] immediate;
-reg[3:0] y;
-output reg buff_en;
-output reg [15:0]enable;
-output reg [4:0]control1;
-output reg [4:0]control2;
-output reg imm_control;
-output reg [7:0]opcode;
+// ns Logic: Next state transitions
 
-parameter [3:0]s0 = 4'b0000, s1 = 4'b0001, s2 = 4'b0010, s3 = 4'b0011, s4 = 4'b0100, 
-					s5 = 4'b0101, s6 = 4'b0110, s7 = 4'b0111, s8 = 4'b1000, s9 = 4'b1001;
-					
-always@(posedge clk, negedge reset)
-	if(reset == 0) y <= s0; //reset values
-	else
-		case(y)
-			s0: y <= s1; //load 0 into immediate
-			s1: y <= s2; //take value from reg0
-			s2: y <= s3; //and both values and return 0 to reg0
-			s3: y <= s4; //load 1 into immediate
-			s4: y <= s5; //take value from reg0
-			s5: y <= s6; //add both values and return value to reg0
-			s6: y <= s7; //load 2 into immediate
-			s7: y <= s8; //take value from reg0
-			s8: y <= s9; //add both values
-			default: y <= s0; //hold value
-		endcase
-		
-always@(y)
-	case(y)
-	s0: begin //reset 
-			immediate = 16'b0000000000000000; 
-			buff_en = 0; 
-			enable = 16'b0000000000000000; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 0; 
-			opcode =  8'b00000000; 
-		 end 
-	s1: begin //take value from reg0
-			immediate = 16'b0000000000000000; 
-			buff_en = 0; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00001; 
-			control2 = 5'b00000; 
-			imm_control = 0; 
-			opcode =  8'b00000000; 
-	    end
-	s2: begin ////load 0 into immediate
-			immediate = 16'b0000000000000000; 
-			buff_en = 0; 
-			enable = 16'b0000000000000000; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode =  8'b00000000; 
-		 end
-	s3: begin //and both values enable buff and store in reg
-			immediate = 16'b0000000000000000; 
-			buff_en = 1; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode = 8'b000000001; //!
-		 end
-	s4: begin //take value from reg0
-			immediate = 16'b0000000000000000; 
-			buff_en = 0; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00001; 
-			control2 = 5'b00000; 
-			imm_control = 0; 
-			opcode =  8'b00000000; 
-		 end
-	s5: begin //load 1 into immedaite
-			immediate = 16'b0000000000000001; 
-			buff_en = 0; 
-			enable = 16'b0000000000000000; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode =  8'b00000000; 
-		 end
+module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_control, opcode);
 
-	s6: begin //add both values and return value to reg0
-			immediate = 16'b0000000000000000; 
-			buff_en = 1; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode =  8'b000000101; //!
-	    end
+    // Input signals for the FSM
+    input clk, reset;
+    
+    // Enable signals for the data flow
+    output reg [15:0] immediate;
+   output reg buff_en;
+   output reg [15:0]enable;
+    output reg [4:0]control1;
+    output reg [4:0]control2;
+    output reg imm_control;
+    output reg [7:0]opcode;
 
-	s7: begin //take value from reg0
-			immediate = 16'b0000000000000000; 
-			buff_en = 0; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00001; 
-			control2 = 5'b00000; 
-			imm_control = 0; 
-			opcode =  8'b00000000;  
-		 end
-	s8: begin //load 2 into immediate
-			immediate = 16'b0000000000000010; 
-			buff_en = 0; 
-			enable = 16'b0000000000000000; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode =  8'b00000000; 
-	    end
-	s9: begin 
-			immediate = 16'b0000000000000000; 
-			buff_en = 1; 
-			enable = 16'b0000000000000001; 
-			control1 = 5'b00000; 
-			control2 = 5'b00000; 
-			imm_control = 1; 
-			opcode =  8'b000000101; //!
-		  end
-			default: begin
-					immediate = 16'b0000000000000000; 
-					buff_en = 0; 
-					enable = 16'b0000000000000000; 
-					control1 = 5'b00000; 
-					control2 = 5'b00000; 
-					imm_control = 0; 
-					opcode =  8'b00000000; 
-			          end
-	endcase
+    
+    // ps -> Previous state, ns -> Next state
+    reg [3:0] ps, ns; 
+    
+    
+    parameter [3:0] s0  = 4'b0000;
+   parameter [3:0] s1  = 4'b0001;
+   parameter [3:0] s2  = 4'b0010;
+   parameter [3:0] s3  = 4'b0011;
+   parameter [3:0] s4  = 4'b0100;
+       
+    //Sequential block, negedge of reset due to push button
+    always @ (posedge clk, posedge reset) begin
+
+        if(reset== 1) ps <= s0;
+        else ps <= ns;
+
+    end
+    
+    // Combinational block, responsible fo setting the next state
+    always@(posedge clk, negedge reset) begin
+
+        case(ps)
+            s0: ns <= s1;
+           s1: ns <= s1;
+            
+            default: ns <= s0;
+        endcase
+    end
+
+
+    always@ (ps) begin
+
+        case(ps)
+            // Reset muxes, and tristate to 0. 
+            // Template for the FSM enable codes
+            s0: begin  
+                    immediate   = 0;  //Incoming Immediate value              [15:0]
+                    enable      = 0;  //Register enable                              [15:0]
+                    opcode      = 0;    //Operation code for ALU                 [7: 0]
+                    control1    = 0;  //control code for mux on the left      [4: 0]
+                    control2    = 0;  //control code for mux on the right     [4: 0]
+                    imm_control = 0;  //control code for immediate value      [1bit]
+                    buff_en     = 0;  //enable signal for ALU output          [1bit]
+                end
+                
+            // Load value into left register from r0 into ALU
+            s1: begin  
+                    immediate   = 16'b0000000000000001; // Load 1 from immediate  
+                    enable      = 16'b0000000000000010; // write into reg 1                
+                    opcode      = 8'b00000101;             // add op    
+                    control1    = 5'b00001;             // enable left mux
+                    control2    = 0;  
+                    imm_control = 1;                    // enable immediate
+                    buff_en     = 1;                    // enable datapath
+                end
+                            
+        endcase
+    end
 endmodule
