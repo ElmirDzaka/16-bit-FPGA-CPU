@@ -9,12 +9,12 @@ input imm_control;
 input[7:0] opcode;
 input [15:0] immediate;
 input buff_en;
-output out;
+output [15:0] out;
 
 wire [15:0] mux1_wire;
 wire [15:0] mux2_wire;
 wire [15:0] mux3_wire;
-wire [15:0] alu_out;
+wire [15:0] alu_out; // This is not used
 wire [15:0] buff_out;
 
 wire [15:0] r0_wire;

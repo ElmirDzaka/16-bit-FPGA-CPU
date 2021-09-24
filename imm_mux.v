@@ -12,7 +12,7 @@ always @(control) begin
 		out = immediate;
 	end
 	else begin
-		out = data_in;
+		out = data_in; // do nothing
 	end
 		
 		

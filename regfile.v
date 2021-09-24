@@ -28,7 +28,7 @@ module Register(D_in, wEnable, reset, clk, r
 	 
  always @( posedge clk )
 	begin
-	if (reset) r <= 16'b0000000000000000;
+	if (!reset) r <= 16'b0000000000000000; // EDIT to not reset
 	else
 		begin			
 			if (wEnable)
