@@ -31,9 +31,9 @@ module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_
    parameter [3:0] s4  = 4'b0100;
        
     //Sequential block, negedge of reset due to push button
-    always @ (posedge clk, posedge reset) begin
+    always @ (posedge clk, negedge reset) begin
 
-        if(reset== 1) ps <= s0;
+        if(reset== 0) ps <= s0;
         else ps <= ns;
 
     end
