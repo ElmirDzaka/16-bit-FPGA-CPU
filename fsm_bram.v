@@ -5,10 +5,10 @@
 
 // ns Logic: Next state transitions
 
-module fsm_bram (data_a, data_b, addr_a, addr_b, we_a, we_b, clk);
+module fsm_bram (data_a, data_b, addr_a, addr_b, we_a, we_b, clk,reset);
 		
 	input clk;
-	
+	input reset;
    output reg [47:0] data_a, data_b;
 	output reg [9:0] addr_a, addr_b;
 	output reg we_a, we_b;
