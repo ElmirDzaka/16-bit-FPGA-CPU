@@ -1,11 +1,4 @@
-// Module for the Fibonacci sequence
-// Created by Louis J. Cerda on 9/23/2021
-// Fibonacci sequnce for reference
-// 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144
-
-// ns Logic: Next state transitions
-
-module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_control, opcode);
+module fsm_sub (clk, reset, immediate, buff_en, enable, control1, control2, imm_control, opcode);
 
     // Input signals for the FSM
     input clk, reset;
@@ -65,9 +58,8 @@ module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_
     always@ (ps) begin
 
         case(ps)
-            // Reset all registers, muxes,tri-state-buffer
-				//Step 0 : 
-            s0: begin  
+            //reset all enables to 0
+			 s0: begin  
                     immediate   = 0;  //Incoming Immediate value              [15:0]
                     enable      = 0;  //Register enable                       [15:0]
                     opcode      = 0;  //Operation code for ALU                [7: 0]
@@ -76,10 +68,10 @@ module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_
                     imm_control = 0;  //control code for immediate value      [1bit]
                     buff_en     = 0;  //enable signal for ALU output          [1bit]
                 end
-                
-            // Step 1: R1 = 0+1 = 1
+			 
+			 // Step 1: R1 = 0+10 = 10
             s1: begin  
-                    immediate   = 16'b0000000000000001; 
+                    immediate   = 16'b0000000000001010; 
                     enable      = 16'b0000000000000010;//r1                 
                     opcode      = 8'b00000101;                     
                     control1    = 5'b00001;//r0             // enable left mux
@@ -88,49 +80,48 @@ module fsm_sum (clk, reset, immediate, buff_en, enable, control1, control2, imm_
                     buff_en     = 1;                    
                 end
 					 
-				 // Step 2: R2 = 0+1 = 1
+					// R2 = r1 - 1 = 9
             s2: begin  
                     immediate   = 16'b0000000000000001; 
-                    enable      = 16'b0000000000000100;//r2                
-                    opcode      = 8'b00000101;                     
-                    control1    = 5'b00001;//r0             // enable left mux
-                    control2    = 5'b00010;//r1 
-                    imm_control = 0;                    
-                    buff_en     = 1;    
+                    enable      = 16'b0000000000000100;//r2                 
+                    opcode      = 8'b00001001;                     
+                    control1    = 5'b00010;//r1             // enable left mux
+                    control2    = 0;     
+                    imm_control = 1;       //immediate               
+                    buff_en     = 1;                    
                 end
 					 
-					 
-				 // Step 3: R3 = 1+1 = 2
+					 	// R3 = r2 - 1 = 8
             s3: begin  
-                    immediate   = 0; 
+                    immediate   = 16'b0000000000000001; 
                     enable      = 16'b0000000000001000;//r3                 
-                    opcode      = 8'b00000101;                     
-                    control1    = 5'b00010; //r1            // enable left mux
-                    control2    = 5'b00011; //r2 
-                    imm_control = 0;                    
-                    buff_en     = 1;    
+                    opcode      = 8'b00001001;                     
+                    control1    = 5'b00011;//r2             // enable left mux
+                    control2    = 0;     
+                    imm_control = 1;       //immediate               
+                    buff_en     = 1;                    
+                end
+			 
+			 // R4 = r3 - 1 = 7
+            s4: begin  
+                    immediate   = 16'b0000000000000001; 
+                    enable      = 16'b0000000000010000;//r4                 
+                    opcode      = 8'b00001001;                     
+                    control1    = 5'b00100;//r3             // enable left mux
+                    control2    = 0;     
+                    imm_control = 1;       //immediate               
+                    buff_en     = 1;                    
                 end
 					 
-				// Step 4: R4 = 1+2 = 3
-				s4: begin  
-                    immediate   = 0; 
-                    enable      = 16'b0000000000010000;//r4                 
-                    opcode      = 8'b00000101;                     
-                    control1    = 5'b00011;//r2            // enable left mux
-                    control2    = 5'b00100;//r3  
-                    imm_control = 0;                    
-                    buff_en     = 1;    
-                end
-				
-				// Step 5: R5 = 3+2 = 5
-				s5: begin  
-                    immediate   = 0; 
+					 // R5 = r4 - 1 = 6
+            s5: begin  
+                    immediate   = 16'b0000000000000001; 
                     enable      = 16'b0000000000100000;//r5                 
-                    opcode      = 8'b00000101;                     
-                    control1    = 5'b00100;//r3             // enable left mux
-                    control2    = 5'b00101;//r4 
-                    imm_control = 0;                    
-                    buff_en     = 1;    
+                    opcode      = 8'b00001001;                     
+                    control1    = 5'b00101;//r4            // enable left mux
+                    control2    = 0;     
+                    imm_control = 1;       //immediate               
+                    buff_en     = 1;                    
                 end
                             
         endcase

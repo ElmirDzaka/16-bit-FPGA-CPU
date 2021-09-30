@@ -3,8 +3,11 @@ module tristatebuffer(inp, en, out);
 input [15:0] inp;
 input en;
 
-output wire [15:0] out;
+output reg [15:0] out;
 
-assign out = en?inp:16'bx;
+//assign out = en?inp:16'bx;
+always @(inp, en) begin
+		 out = en?inp:16'bx;
+end
 
 endmodule

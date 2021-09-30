@@ -7,14 +7,19 @@ output reg [15:0] out;
 
 
 
-always @(control) begin
-	if(control) begin
-		out = immediate;
-	end
-	else begin
-		out = data_in; // do nothing
-	end
+//always @(control, immediate) begin
+//	if(control) begin
+//		out = immediate;
+//	end
+//	else begin
+//		out = data_in; // do nothing
+//	end
 		
+		always @(*) begin
+		
+			out = control ? immediate : data_in;
+			
+			
 		
 		
 

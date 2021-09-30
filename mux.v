@@ -18,7 +18,7 @@ output reg [15:0] out;
 
 
 
-always @(control) begin
+always @(control, r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, r13, r14, r15) begin
 	case(control)
 		5'b00000: out = 16'bx;       // Wait condition, might throw errors
 		5'b00001: out = r0;
