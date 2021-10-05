@@ -8,8 +8,8 @@ reg clk, reset;
  wire we_a_wire, we_b_wire;
 
 
-fsm_bram test1(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_a_wire), .clk(clk), .reset(reset));
-bram test2(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_a_wire), .clk(clk));
+fsm_bram test1(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .reset(reset));
+bram test2(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk));
 
 initial begin
  clk = 0;
