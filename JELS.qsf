@@ -38,7 +38,7 @@
 
 set_global_assignment -name DEVICE 5CSEMA5F31C6
 set_global_assignment -name FAMILY "Cyclone V"
-set_global_assignment -name TOP_LEVEL_ENTITY fsm_bram
+set_global_assignment -name TOP_LEVEL_ENTITY bram_datapath
 set_global_assignment -name ORIGINAL_QUARTUS_VERSION 18.0.0
 set_global_assignment -name PROJECT_CREATION_TIME_DATE "16:03:48  SEPTEMBER 02, 2021"
 set_global_assignment -name LAST_QUARTUS_VERSION "18.1.0 Lite Edition"
@@ -72,8 +72,8 @@ set_global_assignment -name VERILOG_FILE fsm_sum.v
 set_global_assignment -name VERILOG_FILE fsm_datapath.v
 set_global_assignment -name VERILOG_FILE FSM_sub.v
 set_global_assignment -name VERILOG_FILE fsm_sub.v
-set_location_assignment PIN_AA14 -to clk
-set_location_assignment PIN_AA15 -to reset
+set_location_assignment PIN_Y16 -to clk
+set_location_assignment PIN_W15 -to reset
 set_location_assignment PIN_AH28 -to z[6]
 set_location_assignment PIN_AG28 -to z[5]
 set_location_assignment PIN_AF28 -to z[4]
