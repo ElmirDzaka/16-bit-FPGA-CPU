@@ -59,65 +59,64 @@ module fsm_bram (data_a, data_b, addr_a, addr_b, we_a, we_b, clk,reset);
     always@ (ps) begin
 
         case(ps)
-            // Reset all registers, muxes,tri-state-buffer
-				//Step 0 : 
+            //read value at address 1 using port a
             s0: begin   
-                    data_a   = 24; //Data to A             [47:0]
+                    data_a   = 0; //Data to A             [47:0]
                     data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
+                    addr_a   = 1;  //Memory Address from A [9: 0]
                     addr_b   = 0;  //Memory Addres from B  [9: 0]
-                    we_a     = 1;  //Write enable A        [1bit]
+                    we_a     = 0;  //Write enable A        [1bit]
                     we_b     = 0;  //Write enable B        [1bit]
                 end
                 
-            // Step 1: R1 = 0+1 = 1
+            // write value 10 to address 1 using port a
             s1: begin  
-                    data_a   = 24; //Data to A             [47:0]
+                    data_a   = 10; //Data to A             [47:0]
                     data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
+                    addr_a   = 1;  //Memory Address from A [9: 0]
                     addr_b   = 0;  //Memory Addres from B  [9: 0]
                     we_a     = 1;  //Write enable A        [1bit]
                     we_b     = 0;  //Write enable B        [1bit]
                 end
 					 
-				 // Step 2: R2 = 0+1 = 1
+				 // reading value at address 1
             s2: begin  
-                    data_a   = 24; //Data to A             [47:0]
+                    data_a   = 0; //Data to A             [47:0]
                     data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
+                    addr_a   = 1;  //Memory Address from A [9: 0]
                     addr_b   = 0;  //Memory Addres from B  [9: 0]
-                    we_a     = 1;  //Write enable A        [1bit]
+                    we_a     = 0;  //Write enable A        [1bit]
                     we_b     = 0;  //Write enable B        [1bit]
                 end
 					 
 					 
-				 // Step 3: R3 = 1+1 = 2
+				 //reading value at address 2 
             s3: begin  
-                    data_a   = 24; //Data to A             [47:0]
+                    data_a   = 0; //Data to A             [47:0]
                     data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
-                    addr_b   = 0;  //Memory Addres from B  [9: 0]
-                    we_a     = 1;  //Write enable A        [1bit]
+                    addr_a   = 0;  //Memory Address from A [9: 0]
+                    addr_b   = 2;  //Memory Addres from B  [9: 0]
+                    we_a     = 0;  //Write enable A        [1bit]
                     we_b     = 0;  //Write enable B        [1bit]
                 end
 					 
-				// Step 4: R4 = 1+2 = 3
+				// writing value 20 to address 2
 				s4: begin  
-                    data_a   = 24; //Data to A             [47:0]
-                    data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
-                    addr_b   = 0;  //Memory Addres from B  [9: 0]
-                    we_a     = 1;  //Write enable A        [1bit]
-                    we_b     = 0;  //Write enable B        [1bit]
+                    data_a   = 0; //Data to A             [47:0]
+                    data_b   = 20;  //Data to B             [47:0]
+                    addr_a   = 0;  //Memory Address from A [9: 0]
+                    addr_b   = 2;  //Memory Addres from B  [9: 0]
+                    we_a     = 0;  //Write enable A        [1bit]
+                    we_b     = 1;  //Write enable B        [1bit]
                 end
 				
-				// Step 5: R5 = 3+2 = 5
+				// reading value at address 2
 				s5: begin  
-                    data_a   = 24; //Data to A             [47:0]
+                    data_a   = 0; //Data to A             [47:0]
                     data_b   = 0;  //Data to B             [47:0]
-                    addr_a   = 2;  //Memory Address from A [9: 0]
-                    addr_b   = 0;  //Memory Addres from B  [9: 0]
-                    we_a     = 1;  //Write enable A        [1bit]
+                    addr_a   = 0;  //Memory Address from A [9: 0]
+                    addr_b   = 2;  //Memory Addres from B  [9: 0]
+                    we_a     = 0;  //Write enable A        [1bit]
                     we_b     = 0;  //Write enable B        [1bit]
                 end
                             
