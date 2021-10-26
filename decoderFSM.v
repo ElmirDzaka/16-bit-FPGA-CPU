@@ -6,15 +6,18 @@
 // reset:     Reset signal to reset FSM???
 // out:        
 
-module decoder(clk, in, out, reset, immediate, enable, opcode, control1, control2, imm_control, buff_en, en_pc, pc_mux_en); //make sure all flags are defined in all cases
+module decoderFSM(clk, in, reset, immediate, enable, opcode, control1, control2, imm_control, buff_en, en_pc, pc_mux_en); //make sure all flags are defined in all cases
 	
 	// I/0 parameters
 	input  clk;
 	input       [15:0] in;
-	output reg [15:0] out;
-	reg        [7:0] copcode;  
+	//output reg [15:0] out;
+	reg        [7:0] copcode;
+	reg        [7:0] copcode2;
 	reg        [3:0] rdst;
 	reg        [3:0] rsrc;
+	reg        [3:0] rdst2;
+	reg        [3:0] rsrc2;
 	input      reset;
 
 	// Enables signals
@@ -60,8 +63,44 @@ module decoder(clk, in, out, reset, immediate, enable, opcode, control1, control
 		else begin
 			// Need to add more stepping
         case(ps)
-           s0: ns <= s1;  // EDIT changed s1: ns <= si  to s0: ns <= si
-			  s1: ns <= s2;
+           s0: begin
+					  ns <= s1;  // EDIT changed s1: ns <= si  to s0: ns <= si
+					  copcode2 <= in [15:8];
+						
+						// Fetch Rdest and Rsrc
+						rdst2 = in[7:4];
+						rsrc2 = in[3:0];
+						end
+			  s1: begin
+			  				case(copcode2)
+						// add
+						8'b00000101 : ns = s2;
+						//addu
+						8'b00000110 : ns = s2;
+						//addc
+						8'b00000111 : ns = s2;
+						//sub
+						8'b00001001 : ns = s2;
+						//cmp
+						8'b00001011 : ns = s2;
+						//AND
+						8'b00000001 : ns = s2;
+						//Or
+						8'b00000010 : ns = s2;
+						//xor
+						8'b00000011 : ns = s2;
+						//lsh
+						8'b10000100 : ns = s2;
+						//rsh
+						8'b00001000 : ns = s2;
+						//alsh
+						8'b00001100 : ns = s2;
+						//arsh
+						8'b00001111 : ns = s2;
+						//not
+						8'b00000100 : ns = s2;				
+				endcase
+				end
 			  s2: ns <= s3;
 			  s3: ns <= s4;
 			  s4: ns <= s5;
@@ -86,7 +125,7 @@ module decoder(clk, in, out, reset, immediate, enable, opcode, control1, control
 		
 
 
-	always @(ps, in) begin // SAMQ
+	always @(ps) begin // SAMQ
 		case(ps)
 		
 			// s0: Fetch stage
@@ -117,34 +156,34 @@ module decoder(clk, in, out, reset, immediate, enable, opcode, control1, control
 			s1: begin
 			
 				// R Types instructions. Checks to see if the opcode is present
-				case(copcode)
-						// add
-						8'b00000101 : ns = s2;
-						//addu
-						8'b00000110 : ns = s2;
-						//addc
-						8'b00000111 : ns = s2;
-						//sub
-						8'b00001001 : ns = s2;
-						//cmp
-						8'b00001011 : ns = s2;
-						//AND
-						8'b00000001 : ns = s2;
-						//Or
-						8'b00000010 : ns = s2;
-						//xor
-						8'b00000011 : ns = s2;
-						//lsh
-						8'b10000100 : ns = s2;
-						//rsh
-						8'b00001000 : ns = s2;
-						//alsh
-						8'b00001100 : ns = s2;
-						//arsh
-						8'b00001111 : ns = s2;
-						//not
-						8'b00000100 : ns = s2;				
-				endcase
+//				case(copcode)
+//						// add
+//						8'b00000101 : ns = s2;
+//						//addu
+//						8'b00000110 : ns = s2;
+//						//addc
+//						8'b00000111 : ns = s2;
+//						//sub
+//						8'b00001001 : ns = s2;
+//						//cmp
+//						8'b00001011 : ns = s2;
+//						//AND
+//						8'b00000001 : ns = s2;
+//						//Or
+//						8'b00000010 : ns = s2;
+//						//xor
+//						8'b00000011 : ns = s2;
+//						//lsh
+//						8'b10000100 : ns = s2;
+//						//rsh
+//						8'b00001000 : ns = s2;
+//						//alsh
+//						8'b00001100 : ns = s2;
+//						//arsh
+//						8'b00001111 : ns = s2;
+//						//not
+//						8'b00000100 : ns = s2;				
+//				endcase
 				
 				
 				//TODO Else its immediate instruction
