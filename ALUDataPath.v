@@ -34,6 +34,10 @@ wire [15:0] r13_wire;
 wire [15:0] r14_wire;
 wire [15:0] r15_wire;
 
+wire[7:0] read_flags;
+wire[7:0] write_flags;
+
+wire flag_en;
 
 
 //regbank
@@ -50,8 +54,11 @@ mux mux2(.control(control2), .out(mux2_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2
 //immediate mux
 imm_mux mux3(.immediate(immediate),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
 
+//regflag
+regflag flags(.D_in(write_flags), .wEnable(flag_en), .reset(reset), .clk(clk), .r(read_flags));
+
 //ALU
-ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(out), .opcode(opcode));
+ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(out), .opcode(opcode), .flags_in(read_flags), .flags_out(write_flags));
 
 //tristatebuffer
 tristatebuffer tristatebuffer1(.inp(out), .en(buff_en), .out(buff_out));
