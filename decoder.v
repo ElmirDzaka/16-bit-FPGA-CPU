@@ -1,10 +1,21 @@
-module decoder(raw_instructions, opcode, rdst, rsrc, immediate);
+module decoder(raw_instructions, opcode, rdst, rsrc, immediate, flag_type); // Type flag. 
 
-input [15:0] raw_instructions;
+input      [15:0] raw_instructions;
 output reg [7:0] opcode;
 output reg [3:0] rdst;
 output reg [3:0] rsrc;
 output reg [7:0] immediate;
+
+
+// R-types    4'b0001;
+// I-type     4'b0010;
+// Load/Store 4'b0100;
+// Jumps?     4'b1000;
+
+output reg [3:0] flag_type; 
+
+
+
 
 always @(raw_instructions) begin
 
@@ -16,6 +27,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//addu
@@ -23,6 +35,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+		   flag_type = 4'b0001; // R-type 
 		end
 		
 		//addc
@@ -30,6 +43,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//sub
@@ -37,6 +51,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//cmp
@@ -44,6 +59,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//AND
@@ -51,6 +67,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//Or
@@ -58,6 +75,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//xor
@@ -65,6 +83,8 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
+
 		end
 		
 		//lsh
@@ -72,6 +92,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//rsh
@@ -79,6 +100,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//alsh
@@ -86,6 +108,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//arsh
@@ -93,6 +116,7 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end
 		
 		//not
@@ -100,19 +124,12 @@ always @(raw_instructions) begin
 			rdst = raw_instructions[7:4];
 			rsrc = raw_instructions[3:0];	
 			immediate = 8'bx;
+			flag_type = 4'b0001; // R-type 
 		end		
 	
 	
 	
 	endcase
-
-
-
-
 end
-
-
-
-
 
 endmodule

@@ -1,7 +1,8 @@
-module regflag(D_in, wEnable, reset, clk, r,); // To add output for the FSM to connect to flags
-     input [7:0] D_in;
+// File for IR Immediate Register
+module IR(D_in, wEnable, reset, clk, r);
+     input [15:0] D_in;
      input clk, wEnable, reset;
-     output reg [7:0] r;
+     output reg [15:0] r;
 
  always @( posedge clk )
     begin
@@ -10,11 +11,11 @@ module regflag(D_in, wEnable, reset, clk, r,); // To add output for the FSM to c
         begin
             if (wEnable)
                 begin
-                    r <= D_in;
+                    r <= D_in; // If enable High, Store immediate instruction
                 end
             else
                 begin
-                    r <= r;
+                    r <= r;   //  Otherwise keep the current instruction
                 end
         end
     end

@@ -6,7 +6,7 @@ module fsm_sub (clk, reset, immediate, buff_en, enable, control1, control2, imm_
     // Enable signals for the data flow
     output reg [15:0] immediate;
     output reg buff_en;
-    output reg [15:0]enable;
+    output reg [15:0]enable; // register 15b
     output reg [4:0]control1;
     output reg [4:0]control2;
     output reg imm_control;

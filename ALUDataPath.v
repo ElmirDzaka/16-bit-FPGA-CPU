@@ -74,7 +74,7 @@ mux mux2(.control(control2), .out(mux2_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2
 //immediate mux
 imm_mux mux3(.immediate(immediate),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
 
-//regflag
+//regflag // edit output to fsm
 regflag flags(.D_in(write_flags), .wEnable(flag_en), .reset(reset), .clk(clk), .r(read_flags));
 
 //ALU
@@ -91,12 +91,17 @@ pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(pc_m
 program_counter pc(.in_pc(pc_mux_out), .en_pc(en_pc_wire), .pc_result(addr_a_wire), .reset(reset));
 
 //bram
-
 bram ram(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
 
 
+//decoder
 
-//decoder fsm
-decoderFSM decoder(.clk(clk), .in(q_a_wire), .reset(reset), .immediate(immediate), .enable(enable), .opcode(opcode), .control1(control1), .control2(control2), .imm_control(imm_control), .buff_en(buff_en), .en_pc(en_pc_wire), .pc_mux_en(pc_mux_en));
+
+//global_fsm
+
+
+//translator
+
+//IR
 
 endmodule
