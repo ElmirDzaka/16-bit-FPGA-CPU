@@ -1,14 +1,9 @@
 // Code for the FSM
-module global_fsm(clk, reset,  ram_enable, opcode_in ,rdst_in ,rsrc_in ,immediate_in, immediate_out, pc_mux_en, rdst_out, rsrc_out, flags, flag_type, pc_en, r_en, imm_mux, tristate_en, opcode_out); // NOTE include LS contorl.
+module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate_in, immediate_out, pc_mux_en, rdst_out, rsrc_out, flags, flag_type, pc_en, flag_enable, imm_mux, tristate_en, opcode_out, IR_enable); // NOTE include LS contorl.
 
 	input clk;
 	input reset;
-	input [15:0] rdst_in;     // 4 bits ----> 16 bits  // 1111 -. 15'b100000000000000 enable to write
-	                         // To read regbank its 5bits, to write 16 bit
-									 
-									 // Decoder 4 bits 
-	
-	
+	input [15:0] rdst_in;     
 	input [4:0] rsrc_in;
 	input [3:0] flag_type;
 	input [7:0] immediate_in;
@@ -16,15 +11,17 @@ module global_fsm(clk, reset,  ram_enable, opcode_in ,rdst_in ,rsrc_in ,immediat
 	input [7:0] flags;
 	
 	output reg pc_en;
-	output reg pc_mux_en;
-	output reg r_en; //  flag enable
-	output reg imm_mux;
+	output reg pc_mux_en; //shows
+	output reg flag_enable; //  flag enable
+	output reg imm_mux; // shows
 	output reg tristate_en;
-	output reg ram_enable;
+	output reg we_enable;
+	output reg IR_enable; // shows
 	output reg [15:0] rdst_out;
 	output reg [4:0] rsrc_out;
 	output reg [7:0] opcode_out;
 	output reg [7:0] immediate_out;
+	
 
 
 	
@@ -95,10 +92,11 @@ module global_fsm(clk, reset,  ram_enable, opcode_in ,rdst_in ,rsrc_in ,immediat
 			s0: begin
 				pc_en         = 0;
 				pc_mux_en     = 0;
-				r_en          = 0;
+				IR_enable          = 0;
 				imm_mux       = 0;
 				tristate_en   = 0;
-				ram_enable     = 0;
+				we_enable     = 0;
+				flag_enable    =0;
 				rdst_out      = 16'bx;
 				rsrc_out      = 5'bx;
 				opcode_out    = 8'bx;
@@ -109,10 +107,11 @@ module global_fsm(clk, reset,  ram_enable, opcode_in ,rdst_in ,rsrc_in ,immediat
 			s1: begin
 			   pc_en         = 0;
 				pc_mux_en     = 0;
-				r_en          = 1; // save instruction
+				IR_enable          = 1; // save instruction
 				imm_mux       = 0;
 				tristate_en   = 1;
-				ram_enable    = 0;
+				we_enable    = 0;
+				flag_enable   = 0;
 				rdst_out      = rdst_in;
 				rsrc_out      = rsrc_in;
 				opcode_out    = opcode_in;

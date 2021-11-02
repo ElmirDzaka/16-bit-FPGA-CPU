@@ -1,4 +1,4 @@
-module regflag(D_in, wEnable, reset, clk, r,); // To add output for the FSM to connect to flags
+module regflag(D_in, wEnable, reset, clk, r); // To add output for the FSM to connect to flags
      input [7:0] D_in;
      input clk, wEnable, reset;
      output reg [7:0] r;
