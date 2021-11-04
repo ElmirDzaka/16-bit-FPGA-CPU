@@ -26,15 +26,18 @@ wire [3:0] flag_type;
 wire [4:0] rsrc_translated;
 wire [15:0] rdst_translated;
 wire IR_enable;
-wire IR_out; // Wire size will have to change.
+wire [15:0] IR_out; // Wire size will have to change.
 wire we_enable;
 wire [7:0] fsm_immediate;
 wire [15:0] fsm_rdst_out;
 wire [4:0] fsm_rsrc_out;
-wire [7:0] fsm_flags;
+//wire [7:0] fsm_flags;
 wire fsm_pc_en;
 wire fsm_flag_enable;
 wire [7:0] fsm_opcode_out;
+wire ls_control;
+wire [15:0] ls_out;
+wire [15:0] rdst_out_write_wire;
 
 
 
@@ -106,28 +109,35 @@ tristatebuffer tristatebuffer1(.inp(out), .en(buff_en), .out(buff_out));
 
 
 //pc mux
-pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(pc_mux_data_in), .out(pc_mux_out));
+pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(q_a_wire), .out(pc_mux_out));
 
 //program counter
 program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset));
 
 //bram
-bram ram(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(addr_a_wire), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
+bram ram(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(ls_out), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
 
 
 //decoder
 
-decoder decoder(.raw_instructions(q_a_wire), .opcode(opcode), .rdst(rdst), .rsrc(rsrc), .immediate(ram_immediate), .flag_type(flag_type));
+decoder decoder(.raw_instructions(IR_out), .opcode(opcode), .rdst(rdst), .rsrc(rsrc), .immediate(ram_immediate), .flag_type(flag_type));
 
 
 //global_fsm
-global_fsm global_fsm(.clk(clk), .reset(reset), .we_enable(we_a_wire), .opcode_in(opcode), .rdst_in(rdst_translated), .rsrc_in(rsrc_translated), .immediate_in(ram_immediate), .immediate_out(fsm_immediate), .pc_mux_en(pc_mux_en), .rdst_out(fsm_rdst_out), .rsrc_out(fsm_rsrc_out), .flags(fsm_flags), .flag_type(flag_type), .pc_en(fsm_pc_en), .flag_enable(fsm_flag_enable), .imm_mux(imm_control), .tristate_en(buff_en), .opcode_out(fsm_opcode_out), .IR_enable(IR_enable));
-
+global_fsm global_fsm(.clk(clk), .reset(reset), .we_enable(we_a_wire), .opcode_in(opcode), .rdst_in(rdst_translated), .rsrc_in(rsrc_translated), .immediate_in(ram_immediate), .immediate_out(fsm_immediate), .pc_mux_en(pc_mux_en), .rdst_out(control2), .rsrc_out(control1), .flags(read_flags), .flag_type(flag_type), .pc_en(fsm_pc_en), .flag_enable(fsm_flag_enable), .imm_mux(imm_control), .tristate_en(buff_en), .opcode_out(fsm_opcode_out), .IR_enable(IR_enable), .ls_control(ls_control), .rdst_write_out(enable), .rdst_write_in(rdst_out_write_wire)) ;
+// needs ls control
+// rdst_out_wire
 
 //translator
-translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated));
+translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated), .rdst_out_write(rdst_out_write_wire));
 
 //IR
 IR IR(.D_in(q_a_wire), .wEnable(IR_enable), .reset(reset), .clk(clk), .r(IR_out));
+
+//LS control
+ls_mux ls_mux(.rdst_addr(mux2_wire), .control(ls_control), .pc_addr(addr_a_wire), .out(ls_out));
+
+
+
 
 endmodule

@@ -1,34 +1,49 @@
 // Code for the FSM
-module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate_in, immediate_out, pc_mux_en, rdst_out, rsrc_out, flags, flag_type, pc_en, flag_enable, imm_mux, tristate_en, opcode_out, IR_enable); // NOTE include LS contorl.
+module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate_in, immediate_out, pc_mux_en, rdst_out, rsrc_out, flags, flag_type, pc_en, flag_enable, imm_mux, tristate_en, opcode_out, IR_enable, ls_control , rdst_write_out, rdst_write_in); // NOTE include LS contorl.
 
+	// Global Clock and Reset
 	input clk;
 	input reset;
-	input [15:0] rdst_in;     
-	input [4:0] rsrc_in;
+	
+	// Read and write for regbank
+	input [15:0] rdst_write_in;  // Reg bank write enable
+	input [4:0] rsrc_in;         // mux a load control
+	input [4:0] rdst_in;         // mux b load control
+
+	
+
+	// Flags
+	input [7:0] flags;
 	input [3:0] flag_type;
+	
+	// Operations
 	input [7:0] immediate_in;
 	input [7:0] opcode_in;
-	input [7:0] flags;
 	
+	// 1 bit enable signals 
 	output reg pc_en;
-	output reg pc_mux_en; //shows
-	output reg flag_enable; //  flag enable
-	output reg imm_mux; // shows
+	output reg pc_mux_en; 
+	output reg flag_enable; 
+	output reg imm_mux; 
 	output reg tristate_en;
 	output reg we_enable;
-	output reg IR_enable; // shows
-	output reg [15:0] rdst_out;
-	output reg [4:0] rsrc_out;
+	output reg IR_enable;
+	output reg ls_control;
+	
+	
+	// Read and write for regbank
+	output reg [15:0] rdst_write_out; // reg bank write enable
+	output reg [4:0]  rsrc_out;       // mux a load control
+	output reg [4:0]  rdst_out;       // mux b load control
+	
+	
+	// Operations
 	output reg [7:0] opcode_out;
 	output reg [7:0] immediate_out;
 	
 
 
-	
-	//Note missing LS control
-
-
-	
+		
 	// ps -> Previous state, ns -> Next state
    reg [3:0] ps, ns; 
 	
@@ -124,7 +139,7 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 			
 			end
 			
-			s3: begin
+			s3: begin // ask saeed 3, 4 ,5
 			
 			end
 			

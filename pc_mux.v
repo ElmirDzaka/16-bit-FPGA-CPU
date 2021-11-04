@@ -1,9 +1,9 @@
 module pc_mux(immediate, pc_mux_en, data_in, out);
 
-input [15:0] immediate;
-input pc_mux_en;
-input [15:0] data_in;
-output reg [15:0] out;
+input [15:0] immediate; // some immediate jump instruction / displacement
+input pc_mux_en;       // eng
+input [15:0] data_in;  // bram
+output reg [15:0] out; // goes into pc
 
 
 
