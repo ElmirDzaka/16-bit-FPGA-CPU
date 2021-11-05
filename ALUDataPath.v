@@ -70,10 +70,10 @@ wire [15:0] pc_mux_data_in;
 wire [15:0] pc_mux_out;
 
 //bram wires
- wire [47:0] data_a_wire, data_b_wire;
+ wire [15:0] data_a_wire, data_b_wire;
  wire [9:0] addr_a_wire, addr_b_wire;
  wire we_a_wire, we_b_wire;
- wire [47:0] q_a_wire, q_b_wire;
+ wire [15:0] q_a_wire, q_b_wire;
  
 //program counter wires
 wire en_pc_wire;
@@ -105,17 +105,17 @@ regflag flags(.D_in(write_flags), .wEnable(fsm_flag_enable), .reset(reset), .clk
 ALU alu(.r1(mux1_wire), .r2(mux3_wire), .rout(out), .opcode(opcode), .flags_in(read_flags), .flags_out(write_flags));
 
 //tristatebuffer
-tristatebuffer tristatebuffer1(.inp(out), .en(buff_en), .out(buff_out));
+tristatebuffer tristatebuffer1(.Dout_mem(q_a_wire), .Alu_mux_cntrl(buff_en), .Alu_out(out), .out(buff_out));
 
 
 //pc mux
 pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(q_a_wire), .out(pc_mux_out));
 
 //program counter
-program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset));
+program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset) , .clk(clk));
 
 //bram
-bram ram(.data_a(data_a_wire), .data_b(data_b_wire), .addr_a(ls_out), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
+bram ram(.data_a(mux1_wire), .data_b(data_b_wire), .addr_a(ls_out), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
 
 
 //decoder

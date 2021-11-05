@@ -19,3 +19,5 @@ module regflag(D_in, wEnable, reset, clk, r); // To add output for the FSM to co
         end
     end
 endmodule
+
+

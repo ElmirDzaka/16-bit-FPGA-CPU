@@ -1,4 +1,5 @@
-module program_counter(in_pc, en_pc, pc_result, reset); //make sure all flags are defined in all cases
+module program_counter(in_pc, en_pc, pc_result, reset, clk); //make sure all flags are defined in all cases
+input clk;
 input [15:0] in_pc;
 input en_pc;
 input reset;  // Maybe reset not needed
@@ -6,10 +7,12 @@ output reg [15:0] pc_result; // Maybe not 16 bits
 
 
 
-always @(posedge en_pc)
+always @(posedge clk, negedge reset)
 	begin
 	// If reset. Reset the program counter to 0.
-	if (!reset) pc_result = 0; 
+	if (!reset) begin
+	pc_result = 0; 
+	end
 	else
 		begin
 

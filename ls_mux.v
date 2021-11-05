@@ -8,7 +8,7 @@ output reg [15:0] out;
 
     always @(*) begin
 
-            out = control ? pc_addr : rdst_addr;
+            out = control ? rdst_addr :  pc_addr;
 
     end
 

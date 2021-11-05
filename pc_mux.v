@@ -15,7 +15,7 @@ always @(pc_mux_en, immediate) begin
 	end
 	// Else, Select program counter +1
 	else begin
-		out = data_in + 1; 
+		out = data_in + 16'b0000000000000001; 
 	end
 		
 		
