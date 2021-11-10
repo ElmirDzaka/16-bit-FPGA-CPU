@@ -6,7 +6,7 @@ module IR(D_in, wEnable, reset, clk, r);
 
  always @( posedge clk )
     begin
-    if (!reset) r <= 8'b00000000; // EDIT to not reset
+    if (!reset) r <= 16'b0000000000000000; // EDIT to not reset
     else
         begin
             if (wEnable)

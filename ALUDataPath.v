@@ -24,7 +24,7 @@ wire [3:0] rdst;
 wire [3:0] rsrc;
 wire [3:0] flag_type;
 wire [4:0] rsrc_translated;
-wire [15:0] rdst_translated;
+wire [4:0] rdst_translated;
 wire IR_enable;
 wire [15:0] IR_out; // Wire size will have to change.
 wire we_enable;
@@ -71,7 +71,7 @@ wire [15:0] pc_mux_out;
 
 //bram wires
  wire [15:0] data_a_wire, data_b_wire;
- wire [9:0] addr_a_wire, addr_b_wire;
+ wire [15:0] addr_a_wire, addr_b_wire;
  wire we_a_wire, we_b_wire;
  wire [15:0] q_a_wire, q_b_wire;
  
@@ -109,7 +109,7 @@ tristatebuffer tristatebuffer1(.Dout_mem(q_a_wire), .Alu_mux_cntrl(buff_en), .Al
 
 
 //pc mux
-pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(q_a_wire), .out(pc_mux_out));
+pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire), .out(pc_mux_out));
 
 //program counter
 program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset) , .clk(clk));

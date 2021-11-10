@@ -10,7 +10,7 @@ output reg [7:0] immediate;
 // R-types    4'b0001;
 // I-type     4'b0010;
 // Load		  4'b0100;
-//store		  4'b0101;
+// store		  4'b0101;
 // Jumps?     4'b1000;
 
 output reg [3:0] flag_type; 
@@ -19,10 +19,9 @@ parameter [3:0] addi  = 4'b0101;
 parameter [3:0] subi  = 4'b1001;
 
 
-
 always @(raw_instructions) begin
 	
-	if(raw_instructions[15:12] == addi) begin
+   if(raw_instructions[15:12] == addi) begin
 		opcode    = raw_instructions[15:12];
       rdst      = raw_instructions[11:8];
       immediate = raw_instructions[7:0];
@@ -152,7 +151,7 @@ always @(raw_instructions) begin
             rdst = raw_instructions[7:4];
             rsrc = raw_instructions[3:0];
             immediate = 8'bx;
-            flag_type = 4'b0101; // R-type 
+            flag_type = 4'b0101; // store-type 
         end
 
         //load
@@ -160,9 +159,10 @@ always @(raw_instructions) begin
             rdst = raw_instructions[7:4];
             rsrc = raw_instructions[3:0];
             immediate = 8'bx;
-            flag_type = 4'b0100; // R-type 
+            flag_type = 4'b0100; // load-type 
+				
         end
 		endcase
 		end
-	end
+		end
 endmodule

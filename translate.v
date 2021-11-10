@@ -10,9 +10,9 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write);
 	
    // Converts rsrc_in from 4'bits to 16'bits rsrc_out
 	// And, converts rsrc_in from 4'bits to 5'bits
-	always@(rdst_out) begin
+	always@(rdst_in) begin
 	
-		case(rdst_out)
+		case(rdst_in)
 		4'b0000: begin rdst_out = 5'b00001; //r0
 					rdst_out_write = 16'b0000000000000001; //r0
 					end
@@ -76,13 +76,14 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write);
 		4'b1111: begin rdst_out = 5'b10000; //r15
 				   rdst_out_write  = 16'b1000000000000000; //r15
 					end
+			
 		endcase
 	end
 	
 	// Converts rdst_in from 4'bits to 16'bits rdst_out
-	always@(rdst_in) begin
+	always@(rsrc_in) begin
 		
-		case(rdst_in)
+		case(rsrc_in)
 		4'b0000: rsrc_out = 5'b00001; //r0
 		4'b0001: rsrc_out = 5'b00010; //r1
 		4'b0010: rsrc_out = 5'b00011; //r2
@@ -101,6 +102,8 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write);
 		4'b1111: rsrc_out = 5'b10000; //r15
 		endcase
 	end
+	
+	
 endmodule
 	
 	

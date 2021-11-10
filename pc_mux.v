@@ -8,7 +8,7 @@ output reg [15:0] out; // goes into pc
 
 
 
-always @(pc_mux_en, immediate) begin
+always @(pc_mux_en, immediate, data_in) begin
 	// If control is present, Select the program counter + displacement
 	if(pc_mux_en) begin
 		out = immediate;
