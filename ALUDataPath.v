@@ -66,7 +66,7 @@ wire[7:0] write_flags;
 wire flag_en;
 
 //pc_mux wires
-wire [15:0] pc_mux_immediate;
+wire [7:0] pc_mux_immediate;
 wire pc_mux_en;
 wire [15:0] pc_mux_data_in;
 wire [15:0] pc_mux_out;
@@ -111,7 +111,7 @@ tristatebuffer tristatebuffer1(.Dout_mem(q_a_wire), .Alu_mux_cntrl(buff_en), .Al
 
 
 //pc mux
-pc_mux mux_pc(.immediate(pc_mux_immediate), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire), .out(pc_mux_out));
+pc_mux mux_pc(.immediate(ram_immediate), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire), .out(pc_mux_out));
 
 //program counter
 program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset) , .clk(clk));
