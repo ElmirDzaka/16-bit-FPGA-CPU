@@ -12,6 +12,7 @@ output reg [7:0] immediate;
 // Load		  4'b0100;
 // store		  4'b0101;
 // Jumps?     4'b1000;
+// Wait       4'b0000;
 
 output reg [3:0] flag_type; 
 
@@ -160,8 +161,20 @@ always @(raw_instructions) begin
             rsrc = raw_instructions[3:0];
             immediate = 8'bx;
             flag_type = 4'b0100; // load-type 
-				
         end
+		  
+		  //wait (do nothing)
+        8'b00000000 : begin 
+            rdst = raw_instructions[7:4];
+            rsrc = raw_instructions[3:0];
+            immediate = 8'bx;
+            flag_type = 4'b0000; // load-type 
+        end
+		  
+		  
+		  
+		  
+		  
 		endcase
 		end
 		end

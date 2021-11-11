@@ -37,7 +37,8 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 	
 	// Operations
 	output reg [7:0] opcode_out;
-	output reg [7:0] immediate_out;
+	output reg [15:0] immediate_out; // actual immediate value
+	
 	
 
 
@@ -53,6 +54,8 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
    parameter [3:0] s4  = 4'b0100;
 	parameter [3:0] s5  = 4'b0101;
 	parameter [3:0] s6  = 4'b0110;
+	parameter [3:0] s7  = 4'b0111;
+
 	
 	
 	//Sequential block, negedge of reset due to push button
@@ -92,8 +95,15 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 						ns <= s3;
 					end
 				
+				
+					// Wait state
+					else if(flag_type == 4'b0000) begin
+						ns <= s7;
+					end
+				
+				
 					// Checking for load
-					else  begin
+					else begin
 						if(flag_type == 4'b0100) begin 
 							ns <= s4;
 						end		
@@ -114,6 +124,12 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 				end
 				
 				s5: begin
+					ns <= s0;
+				end
+				s6: begin
+					ns <= s0;
+				end
+				s7: begin
 					ns <= s0;
 				end
         endcase
@@ -213,7 +229,7 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
                 tristate_en = 0; // 1: Pass signal to bus
                 we_enable   = 1; // 1: Enables ram?
                 IR_enable   = 0; // 1: Updates enable
-                ls_control  = 0; // 1: Pick immediate store
+                ls_control  = 1; // 1: Pick immediate store
 
                 // Read and write for regbank
                 rdst_write_out = 16'bx; // reg bank write enable
@@ -239,8 +255,8 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 
                 // Read and write for regbank
                 rdst_write_out = rdst_write_in; // reg bank write enable
-                rsrc_out       = rsrc_in;  // mux a load control
-                rdst_out       = rdst_in;  // mux b load control
+                rsrc_out       = 5'bx;  // mux a load control
+                rdst_out       = rsrc_in;  // mux b load control
 
             // Operations
                 opcode_out     = opcode_in; // ALU Control
@@ -259,10 +275,10 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
                 tristate_en = 1; // 1: Pass signal to bus
                 we_enable   = 0; // 1: Enables ram?
                 IR_enable   = 0; // 1: Updates enable
-                ls_control  = 1; // 1: Pick immediate store
+                ls_control  = 0; // 1: Pick immediate store
 
                 // Read and write for regbank
-                rdst_write_out = 16'bx; // reg bank write enable
+                rdst_write_out = rdst_write_in; // reg bank write enable
                 rsrc_out       = rsrc_in;  // mux a load control
                 rdst_out       = rdst_in;  // mux b load control
 
@@ -275,25 +291,48 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 			end
 			
 			s6: begin
-			// 1 bit enable signals 
-				pc_en       = 0; // 1: Updates PC              
+            // 1 bit enable signals 
+                pc_en       = 1; // 1: Updates PC
+                pc_mux_en   = 0; // 1: Pick Displacement
+                flag_enable = 0; // 1: Update flags
+                imm_mux     = 1; // 1: Pick immediate
+                tristate_en = 0; // 1: Pass signal to bus
+                we_enable   = 0; // 1: Enables ram?
+                IR_enable   = 0; // 1: Updates enable
+                ls_control  = 0; // 1: Pick immediate store
+
+                // Read and write for regbank
+                rdst_write_out = rdst_write_in; // reg bank write enable
+                rsrc_out       = rdst_in;  // mux a load control
+                rdst_out       = 5'bx;  // mux b load control
+
+            // Operations
+                opcode_out     = opcode_in; // ALU Control
+             immediate_out  = immediate_in; // Immediate value (external source)
+
+            end
+				
+				
+			s7: begin
+				// 1 bit enable signals 
+				pc_en       = 1; // 1: Updates PC              
 				pc_mux_en   = 0; // 1: Pick Displacement
 				flag_enable = 0; // 1: Update flags
-				imm_mux     = 1; // 1: Pick immediate
-				tristate_en = 1; // 1: Pass signal to bus
+				imm_mux     = 0; // 1: Pick immediate
+				tristate_en = 0; // 1: Pass signal to bus
 				we_enable   = 0; // 1: Enables ram?
-				IR_enable   = 1; // 1: Updates enable
+				IR_enable   = 0; // 1: Updates enable
 				ls_control  = 0; // 1: Pick immediate store
 			
 				// Read and write for regbank
 				rdst_write_out = 16'bx; // reg bank write enable
-				rsrc_out       = rsrc_in;  // mux a load control
-				rdst_out       = rdst_in;  // mux b load control
+				rsrc_out       = 5'bx;  // mux a load control
+				rdst_out       = 5'bx;  // mux b load control
 			
             // Operations
-				opcode_out     = opcode_in; // ALU Control
-	         immediate_out  = 8'bx; // Immediate value (external source)		
-				
+				opcode_out     = 8'bx; // ALU Control
+	         immediate_out  = 8'bx; // Immediate value (external source)
+			
 			end
 			
 		endcase

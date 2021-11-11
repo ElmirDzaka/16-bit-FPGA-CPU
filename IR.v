@@ -4,10 +4,8 @@ module IR(D_in, wEnable, reset, clk, r);
      input clk, wEnable, reset;
      output reg [15:0] r;
 
- always @( posedge clk )
-    begin
-    if (!reset) r <= 16'b0000000000000000; // EDIT to not reset
-    else
+ always @(D_in, wEnable) //Used to be posedge 
+    //if (!reset) r <= 16'b0000000000000000; // EDIT to not reset
         begin
             if (wEnable)
                 begin
@@ -17,6 +15,5 @@ module IR(D_in, wEnable, reset, clk, r);
                 begin
                     r <= r;   //  Otherwise keep the current instruction
                 end
-        end
     end
 endmodule

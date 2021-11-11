@@ -38,6 +38,8 @@ wire [7:0] fsm_opcode_out;
 wire ls_control;
 wire [15:0] ls_out;
 wire [15:0] rdst_out_write_wire;
+wire [15:0] translate_out_imm;
+wire [15:0] fsm_out_imm;
 
 
 
@@ -96,7 +98,7 @@ mux mux2(.control(control2), .out(mux2_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2
 , .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire));
 
 //immediate mux
-imm_mux mux3(.immediate(immediate),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
+imm_mux mux3(.immediate(fsm_out_imm),.control(imm_control), .data_in(mux2_wire), .out(mux3_wire));
 
 //regflag // edit output to fsm
 regflag flags(.D_in(write_flags), .wEnable(fsm_flag_enable), .reset(reset), .clk(clk), .r(read_flags));
@@ -124,12 +126,12 @@ decoder decoder(.raw_instructions(IR_out), .opcode(opcode), .rdst(rdst), .rsrc(r
 
 
 //global_fsm
-global_fsm global_fsm(.clk(clk), .reset(reset), .we_enable(we_a_wire), .opcode_in(opcode), .rdst_in(rdst_translated), .rsrc_in(rsrc_translated), .immediate_in(ram_immediate), .immediate_out(fsm_immediate), .pc_mux_en(pc_mux_en), .rdst_out(control2), .rsrc_out(control1), .flags(read_flags), .flag_type(flag_type), .pc_en(fsm_pc_en), .flag_enable(fsm_flag_enable), .imm_mux(imm_control), .tristate_en(buff_en), .opcode_out(fsm_opcode_out), .IR_enable(IR_enable), .ls_control(ls_control), .rdst_write_out(enable), .rdst_write_in(rdst_out_write_wire)) ;
+global_fsm global_fsm(.clk(clk), .reset(reset), .we_enable(we_a_wire), .opcode_in(opcode), .rdst_in(rdst_translated), .rsrc_in(rsrc_translated), .immediate_in(translate_out_imm), .immediate_out(fsm_out_imm), .pc_mux_en(pc_mux_en), .rdst_out(control2), .rsrc_out(control1), .flags(read_flags), .flag_type(flag_type), .pc_en(fsm_pc_en), .flag_enable(fsm_flag_enable), .imm_mux(imm_control), .tristate_en(buff_en), .opcode_out(fsm_opcode_out), .IR_enable(IR_enable), .ls_control(ls_control), .rdst_write_out(enable), .rdst_write_in(rdst_out_write_wire)) ;
 // needs ls control
 // rdst_out_wire
 
 //translator
-translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated), .rdst_out_write(rdst_out_write_wire));
+translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated), .rdst_out_write(rdst_out_write_wire), .imm_in(ram_immediate), .imm_out(translate_out_imm));
 
 //IR
 IR IR(.D_in(q_a_wire), .wEnable(IR_enable), .reset(reset), .clk(clk), .r(IR_out));

@@ -7,7 +7,7 @@ output reg [15:0] pc_result; // Maybe not 16 bits
 
 
 
-always @(posedge clk, negedge reset)
+always @(en_pc, reset)
 	begin
 	// If reset. Reset the program counter to 0.
 	if (!reset) begin

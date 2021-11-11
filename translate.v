@@ -1,11 +1,13 @@
-module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write);
+module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write, imm_in, imm_out);
 
 	input [3:0] rsrc_in; // src
 	input [3:0] rdst_in; // dest
+	input [7:0] imm_in;  // incoming immediate
 	
 	output reg[4:0]  rsrc_out; // src 
 	output reg[4:0] rdst_out; // dst
 	output reg[15:0] rdst_out_write; // src
+	output reg[15:0] imm_out; // outcoming immediate
 	
 	
    // Converts rsrc_in from 4'bits to 16'bits rsrc_out
@@ -103,6 +105,17 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write);
 		endcase
 	end
 	
+	
+	// Translates the immediate values
+	always@(imm_in) begin
+         if(imm_in[7] == 1) begin
+            imm_out = {8'b11111111,imm_in};
+         end
+         else begin
+                imm_out = {8'b00000000, imm_in};
+         end
+
+    end
 	
 endmodule
 	
