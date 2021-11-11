@@ -7,7 +7,7 @@ output reg [15:0] pc_result; // Maybe not 16 bits
 
 
 
-always @(en_pc, reset)
+always @(posedge clk) //originally en_pc, reset
 	begin
 	// If reset. Reset the program counter to 0.
 	if (!reset) begin
@@ -15,7 +15,6 @@ always @(en_pc, reset)
 	end
 	else
 		begin
-
 			// If Enable is on. Take the incoming program counter value
 			if (en_pc)
 				begin

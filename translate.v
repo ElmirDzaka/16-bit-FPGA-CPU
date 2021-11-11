@@ -1,8 +1,10 @@
-module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write, imm_in, imm_out);
+module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write, imm_in, imm_out, flag_type);
 
 	input [3:0] rsrc_in; // src
 	input [3:0] rdst_in; // dest
 	input [7:0] imm_in;  // incoming immediate
+	
+	input [3:0] flag_type;
 	
 	output reg[4:0]  rsrc_out; // src 
 	output reg[4:0] rdst_out; // dst
@@ -12,8 +14,12 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write, imm_in, 
 	
    // Converts rsrc_in from 4'bits to 16'bits rsrc_out
 	// And, converts rsrc_in from 4'bits to 5'bits
-	always@(rdst_in) begin
-	
+	always@(rdst_in, flag_type) begin
+		if(flag_type == 4'b1000 || flag_type == 4'b1100) begin
+			rdst_out = 5'bx;
+			rdst_out_write = 16'bx;			
+		end
+		else begin
 		case(rdst_in)
 		4'b0000: begin rdst_out = 5'b00001; //r0
 					rdst_out_write = 16'b0000000000000001; //r0
@@ -80,6 +86,7 @@ module translate (rsrc_in, rdst_in, rsrc_out, rdst_out, rdst_out_write, imm_in, 
 					end
 			
 		endcase
+		end
 	end
 	
 	// Converts rdst_in from 4'bits to 16'bits rdst_out

@@ -83,6 +83,8 @@ wire en_pc_wire;
 
 //decoder fsm wires
 
+wire [15:0] dis_to_pc;
+
 
 
 
@@ -111,7 +113,7 @@ tristatebuffer tristatebuffer1(.Dout_mem(q_a_wire), .Alu_mux_cntrl(buff_en), .Al
 
 
 //pc mux
-pc_mux mux_pc(.immediate(ram_immediate), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire), .out(pc_mux_out));
+pc_mux mux_pc(.immediate(dis_to_pc), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire), .out(pc_mux_out));
 
 //program counter
 program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset) , .clk(clk));
@@ -131,13 +133,15 @@ global_fsm global_fsm(.clk(clk), .reset(reset), .we_enable(we_a_wire), .opcode_i
 // rdst_out_wire
 
 //translator
-translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated), .rdst_out_write(rdst_out_write_wire), .imm_in(ram_immediate), .imm_out(translate_out_imm));
+translate translate(.rsrc_in(rsrc), .rdst_in(rdst), .rsrc_out(rsrc_translated), .rdst_out(rdst_translated), .rdst_out_write(rdst_out_write_wire), .imm_in(ram_immediate), .imm_out(translate_out_imm), .flag_type(flag_type));
 
 //IR
 IR IR(.D_in(q_a_wire), .wEnable(IR_enable), .reset(reset), .clk(clk), .r(IR_out));
 
 //LS control
 ls_mux ls_mux(.rdst_addr(mux2_wire), .control(ls_control), .pc_addr(addr_a_wire), .out(ls_out));
+
+pc_displacement pc_displacement1(.pc_in(addr_a_wire), .imm_in(translate_out_imm), .flags(read_flags),.flag_type(flag_type), .dis_out(dis_to_pc), .condition(rdst));
 
 
 

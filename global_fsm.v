@@ -55,6 +55,7 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 	parameter [3:0] s5  = 4'b0101;
 	parameter [3:0] s6  = 4'b0110;
 	parameter [3:0] s7  = 4'b0111;
+	parameter [3:0] s8  = 4'b1000;
 
 	
 	
@@ -100,7 +101,9 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 					else if(flag_type == 4'b0000) begin
 						ns <= s7;
 					end
-				
+					else if((flag_type == 4'b1100) || (flag_type == 4'b1000)) begin
+						ns <= s8;
+					end
 				
 					// Checking for load
 					else begin
@@ -130,6 +133,9 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 					ns <= s0;
 				end
 				s7: begin
+					ns <= s0;
+				end
+				s8: begin
 					ns <= s0;
 				end
         endcase
@@ -198,7 +204,7 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 			// 1 bit enable signals 
 				pc_en       = 1; // 1: Updates PC              
 				pc_mux_en   = 0; // 1: Pick Displacement
-				flag_enable = 0; // 1: Update flags
+				flag_enable = 1; // 1: Update flags
 				imm_mux     = 0; // 1: Pick immediate
 				tristate_en = 0; // 1: Pass signal to bus
 				we_enable   = 0; // 1: Enables ram?
@@ -317,6 +323,28 @@ module global_fsm(clk, reset,  we_enable, opcode_in ,rdst_in ,rsrc_in ,immediate
 				// 1 bit enable signals 
 				pc_en       = 1; // 1: Updates PC              
 				pc_mux_en   = 0; // 1: Pick Displacement
+				flag_enable = 0; // 1: Update flags
+				imm_mux     = 0; // 1: Pick immediate
+				tristate_en = 0; // 1: Pass signal to bus
+				we_enable   = 0; // 1: Enables ram?
+				IR_enable   = 0; // 1: Updates enable
+				ls_control  = 0; // 1: Pick immediate store
+			
+				// Read and write for regbank
+				rdst_write_out = 16'bx; // reg bank write enable
+				rsrc_out       = 5'bx;  // mux a load control
+				rdst_out       = 5'bx;  // mux b load control
+			
+            // Operations
+				opcode_out     = 8'bx; // ALU Control
+	         immediate_out  = 8'bx; // Immediate value (external source)
+			
+			end
+			
+			s8: begin
+				// 1 bit enable signals 
+				pc_en       = 1; // 1: Updates PC              
+				pc_mux_en   = 1; // 1: Pick Displacement
 				flag_enable = 0; // 1: Update flags
 				imm_mux     = 0; // 1: Pick immediate
 				tristate_en = 0; // 1: Pass signal to bus

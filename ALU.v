@@ -7,6 +7,7 @@ input [15:0] r2;
 input [7:0] flags_in;
 
 output reg [15:0] rout;
+reg [15:0] cmp_reg;
 input [7:0] opcode;
 //reg [7:0] flags = 8'b00000000; //C == 0, L == 2, F == 5(OF), Z == 6, N == 7
 
@@ -56,7 +57,8 @@ always @(r1, r2, opcode) // maybe remove r1 and r2
             //cmp
          8'b00001011 : begin 
                 flags_out = 8'b00000000;
-                rout = r1 - r2;
+                cmp_reg = r1 - r2;
+					 rout = r2;
                 
                     if(r1 == r2) begin 
                         flags_out = 8'b01000000;
@@ -65,7 +67,7 @@ always @(r1, r2, opcode) // maybe remove r1 and r2
                     else begin
                         flags_out = 8'b00000000;
                             if(($signed(r1) < 0 || $signed(r2) < 0) || ($signed(r1) < 0 && $signed(r2) < 0)) begin            
-                                if($signed(rout) < $signed(r2)) begin
+                                if($signed(cmp_reg) < $signed(r2)) begin
                                     flags_out = 8'b10000000;
                                 end
                                 
@@ -75,7 +77,7 @@ always @(r1, r2, opcode) // maybe remove r1 and r2
                             end
                             
                             else begin
-                                if($signed(rout) < $signed(r2)) begin
+                                if($signed(cmp_reg) < $signed(r2)) begin
                                     flags_out = 8'b10000100;
                                 end
             
