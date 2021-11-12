@@ -172,7 +172,13 @@ always @(raw_instructions) begin
             flag_type = 4'b0000; // load-type 
         end
 		  
-		  
+		  //Jump unconditional
+		  8'b01001110 : begin
+			rdst = 4'bx; // EQ
+			rsrc = 4'bx;	
+			immediate = raw_instructions[7:0];
+			flag_type = 4'b1000; // Jump 
+		end
 
 		  //JEQ: 01000000
 		  8'b01000000 : begin
@@ -205,6 +211,14 @@ always @(raw_instructions) begin
 			immediate = raw_instructions[7:0];
 			flag_type = 4'b1000; // Jump
 	end		
+		 
+		 //Branch unconditional
+		  8'b11001110 : begin
+			rdst = 4'bx; // EQ
+			rsrc = 4'bx;	
+			immediate = raw_instructions[7:0];
+			flag_type = 4'b1000; // Jump 
+		end
 		 
 		 //BEQ: 11000000
 		 8'b11000000 : begin
