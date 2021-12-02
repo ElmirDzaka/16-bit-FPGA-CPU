@@ -1,7 +1,11 @@
-module ALUDataPath(clk, reset);
+module ALUDataPath(clk, reset, left, right, up, down);
 
 input clk;
 input reset;
+input left;
+input right;
+input down;
+input up;
 wire [15:0] enable; //15'b0000000000011
 wire [4:0] control1;
 wire [4:0] control2;
@@ -84,12 +88,13 @@ wire en_pc_wire;
 //decoder fsm wires
 
 wire [15:0] dis_to_pc;
+wire [15:0] game_contrler_output;
 
 
 
 
 //regbank
-RegBank RegBank0(.ALUBus(buff_out), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire), .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire), .regEnable(enable), .clk(clk), .reset(reset));
+RegBank RegBank0(.ALUBus(buff_out),.player_input(game_contrler_output), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire), .r11(r11_wire), .r12(r12_wire), .r13(r13_wire), .r14(r14_wire), .r15(r15_wire), .regEnable(enable), .clk(clk), .reset(reset));
 
 //mux1
 mux mux1(.control(control1), .out(mux1_wire), .r0(r0_wire), .r1(r1_wire), .r2(r2_wire), .r3(r3_wire), .r4(r4_wire), .r5(r5_wire), .r6(r6_wire), .r7(r7_wire), .r8(r8_wire), .r9(r9_wire), .r10(r10_wire)
@@ -143,6 +148,7 @@ ls_mux ls_mux(.rdst_addr(mux2_wire), .control(ls_control), .pc_addr(addr_a_wire)
 
 pc_displacement pc_displacement1(.pc_in(addr_a_wire), .imm_in(translate_out_imm), .flags(read_flags),.flag_type(flag_type), .dis_out(dis_to_pc), .condition(rdst));
 
+game_controller(.right(right), .left(left), .up(up), .down(down), .movement(game_contrler_output));
 
 
 

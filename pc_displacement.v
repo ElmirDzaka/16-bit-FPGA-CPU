@@ -51,6 +51,11 @@ module pc_displacement(pc_in, imm_in, flags,flag_type, dis_out, condition);
 								end
 								end
 								
+								//Unconditional
+                    4'b1110: begin
+                                    dis_out = imm_in;
+                                end
+								
 				
 				endcase
 			end
@@ -79,7 +84,7 @@ module pc_displacement(pc_in, imm_in, flags,flag_type, dis_out, condition);
 								end
 					//GT		
 					4'b0110: begin
-								if((flags[6] == 1) || (flags[7] == 1)) begin
+								if(flags[7] == 1) begin
 									dis_out = pc_in + imm_in;
 								end
 								else begin
@@ -95,6 +100,11 @@ module pc_displacement(pc_in, imm_in, flags,flag_type, dis_out, condition);
 									dis_out = pc_in + 1;
 								end
 								end
+								
+								//Unconditional
+                    4'b1110: begin
+                                    dis_out = imm_in;
+                                end
 								
 				endcase
 			end
