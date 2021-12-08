@@ -1,11 +1,21 @@
-module ALUDataPath(clk, reset, left, right, up, down);
+module ALUDataPath(clk, reset, pump, dump, matrix_out,z, left, right, down, up);
 
 input clk;
 input reset;
+
+// Controller input
 input left;
 input right;
 input down;
 input up;
+
+//Enable signal from arduino
+input pump;
+input dump;
+output reg [6:0]z;
+
+output [15:0]matrix_out;
+
 wire [15:0] enable; //15'b0000000000011
 wire [4:0] control1;
 wire [4:0] control2;
@@ -124,7 +134,7 @@ pc_mux mux_pc(.immediate(dis_to_pc), .pc_mux_en(pc_mux_en), .data_in(addr_a_wire
 program_counter pc(.in_pc(pc_mux_out), .en_pc(fsm_pc_en), .pc_result(addr_a_wire), .reset(reset) , .clk(clk));
 
 //bram
-bram ram(.data_a(mux1_wire), .data_b(data_b_wire), .addr_a(ls_out), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(q_b_wire));
+bram ram(.data_a(mux1_wire), .data_b(data_b_wire), .addr_a(ls_out), .addr_b(addr_b_wire), .we_a(we_a_wire), .we_b(we_b_wire), .clk(clk), .q_a(q_a_wire), .q_b(matrix_out));
 
 
 //decoder
@@ -149,6 +159,51 @@ ls_mux ls_mux(.rdst_addr(mux2_wire), .control(ls_control), .pc_addr(addr_a_wire)
 pc_displacement pc_displacement1(.pc_in(addr_a_wire), .imm_in(translate_out_imm), .flags(read_flags),.flag_type(flag_type), .dis_out(dis_to_pc), .condition(rdst));
 
 game_controller(.right(right), .left(left), .up(up), .down(down), .movement(game_contrler_output));
+
+// LED matrix program counter
+pc_matrix pc_matrix(.clk(clk), .reset_arduino(dump), .pc_result(addr_b_wire), .enable(pump));
+
+
+
+always @*
+case(addr_b_wire)
+	4'b0000 :			//Hexadecimal 0
+	z = ~7'b0111111;
+   4'b0001 :			//Hexadecimal 1
+	z = ~7'b0000110;
+   4'b0010 :			//Hexadecimal 2
+	z = ~7'b1011011;
+   4'b0011 : 			//Hexadecimal 3
+	z = ~7'b1001111;
+   4'b0100 : 			//Hexadecimal 4
+	z = ~7'b1100110;
+   4'b0101 : 			//Hexadecimal 5
+	z = ~7'b1101101;
+   4'b0110 : 			//Hexadecimal 6
+	z = ~7'b1111101;
+   4'b0111 :			//Hexadecimal 7
+	z = ~7'b0000111;
+   4'b1000 : 			//Hexadecimal 8
+	z = ~7'b1111111;
+   4'b1001 : 			//Hexadecimal 9
+	z = ~7'b1100111;
+	4'b1010 : 			//Hexadecimal A
+	z = ~7'b1110111;
+	4'b1011 : 			//Hexadecimal B
+	z = ~7'b1111100;
+	4'b1100 : 			//Hexadecimal C
+	z = ~7'b1011000;
+	4'b1101 : 			//Hexadecimal D
+	z = ~7'b1011110;
+	4'b1110 : 			//Hexadecimal E
+	z = ~7'b1111001;
+	4'b1111 : 			//Hexadecimal F	
+	z = ~7'b1110001; 
+   default :
+	z = ~7'b0000000;
+	
+endcase
+
 
 
 
