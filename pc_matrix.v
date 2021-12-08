@@ -6,9 +6,9 @@ input reset_arduino;  // Maybe reset not needed
 output reg [15:0] pc_result; // Maybe not 16 bits
 
 
-parameter [15:0] min_value =16'b0000000100000000; // 1. The start of memory for game board
+parameter [15:0] min_value =16'b0000000000000000; // 1. The start of memory for game board
 
-parameter [15:0] max_value =16'b0000000111111111; // 12. The end of memory for game board
+parameter [15:0] max_value =16'b0000000011111111; // 12. The end of memory for game board
 
 
 always @(posedge enable, negedge reset_arduino) begin //originally en_pc, reset begi

@@ -17,7 +17,7 @@ module bram
 	begin
 //		for(i=0;i<1024;i=i+1)
 //			ram[i] = 1;
-			$readmemb("maze_instructions.txt", ram);
+			$readmemb("map.txt", ram);
 	end
 
 	// Port A 
