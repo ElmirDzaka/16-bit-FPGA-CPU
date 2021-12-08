@@ -166,7 +166,7 @@ pc_matrix pc_matrix(.clk(clk), .reset_arduino(dump), .pc_result(addr_b_wire), .e
 
 
 always @*
-case(addr_b_wire)
+case(game_contrler_output)
 	4'b0000 :			//Hexadecimal 0
 	z = ~7'b0111111;
    4'b0001 :			//Hexadecimal 1
