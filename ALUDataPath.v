@@ -1,4 +1,4 @@
-module ALUDataPath(clk, reset, pump, dump, matrix_out,z, left, right, down, up);
+module ALUDataPath(clk, reset, left, right, down, up);
 
 input clk;
 input reset;
@@ -10,11 +10,11 @@ input down;
 input up;
 
 //Enable signal from arduino
-input pump;
-input dump;
-output reg [6:0]z;
+//input pump;
+//input dump;
+//output reg [6:0]z;
 
-output [15:0]matrix_out;
+//output [15:0]matrix_out;
 
 wire [15:0] enable; //15'b0000000000011
 wire [4:0] control1;
@@ -158,51 +158,51 @@ ls_mux ls_mux(.rdst_addr(mux2_wire), .control(ls_control), .pc_addr(addr_a_wire)
 
 pc_displacement pc_displacement1(.pc_in(addr_a_wire), .imm_in(translate_out_imm), .flags(read_flags),.flag_type(flag_type), .dis_out(dis_to_pc), .condition(rdst));
 
-game_controller(.right(right), .left(left), .up(up), .down(down), .movement(game_contrler_output));
+game_controller game(.right(right), .left(left), .up(up), .down(down), .movement(game_contrler_output));
 
 // LED matrix program counter
-pc_matrix pc_matrix(.clk(clk), .reset_arduino(dump), .pc_result(addr_b_wire), .enable(pump));
+//pc_matrix pc_matrix(.clk(clk), .reset_arduino(dump), .pc_result(addr_b_wire), .enable(pump));
 
 
 
-always @*
-case(game_contrler_output)
-	4'b0000 :			//Hexadecimal 0
-	z = ~7'b0111111;
-   4'b0001 :			//Hexadecimal 1
-	z = ~7'b0000110;
-   4'b0010 :			//Hexadecimal 2
-	z = ~7'b1011011;
-   4'b0011 : 			//Hexadecimal 3
-	z = ~7'b1001111;
-   4'b0100 : 			//Hexadecimal 4
-	z = ~7'b1100110;
-   4'b0101 : 			//Hexadecimal 5
-	z = ~7'b1101101;
-   4'b0110 : 			//Hexadecimal 6
-	z = ~7'b1111101;
-   4'b0111 :			//Hexadecimal 7
-	z = ~7'b0000111;
-   4'b1000 : 			//Hexadecimal 8
-	z = ~7'b1111111;
-   4'b1001 : 			//Hexadecimal 9
-	z = ~7'b1100111;
-	4'b1010 : 			//Hexadecimal A
-	z = ~7'b1110111;
-	4'b1011 : 			//Hexadecimal B
-	z = ~7'b1111100;
-	4'b1100 : 			//Hexadecimal C
-	z = ~7'b1011000;
-	4'b1101 : 			//Hexadecimal D
-	z = ~7'b1011110;
-	4'b1110 : 			//Hexadecimal E
-	z = ~7'b1111001;
-	4'b1111 : 			//Hexadecimal F	
-	z = ~7'b1110001; 
-   default :
-	z = ~7'b0000000;
-	
-endcase
+//always @*
+//case(r0_wire)
+//	4'b0000 :			//Hexadecimal 0
+//	z = ~7'b0111111;
+//   4'b0001 :			//Hexadecimal 1
+//	z = ~7'b0000110;
+//   4'b0010 :			//Hexadecimal 2
+//	z = ~7'b1011011;
+//   4'b0011 : 			//Hexadecimal 3
+//	z = ~7'b1001111;
+//   4'b0100 : 			//Hexadecimal 4
+//	z = ~7'b1100110;
+//   4'b0101 : 			//Hexadecimal 5
+//	z = ~7'b1101101;
+//   4'b0110 : 			//Hexadecimal 6
+//	z = ~7'b1111101;
+//   4'b0111 :			//Hexadecimal 7
+//	z = ~7'b0000111;
+//   4'b1000 : 			//Hexadecimal 8
+//	z = ~7'b1111111;
+//   4'b1001 : 			//Hexadecimal 9
+//	z = ~7'b1100111;
+//	4'b1010 : 			//Hexadecimal A
+//	z = ~7'b1110111;
+//	4'b1011 : 			//Hexadecimal B
+//	z = ~7'b1111100;
+//	4'b1100 : 			//Hexadecimal C
+//	z = ~7'b1011000;
+//	4'b1101 : 			//Hexadecimal D
+//	z = ~7'b1011110;
+//	4'b1110 : 			//Hexadecimal E
+//	z = ~7'b1111001;
+//	4'b1111 : 			//Hexadecimal F	
+//	z = ~7'b1110001; 
+//   default :
+//	z = ~7'b0000000;
+//	
+//endcase
 
 
 

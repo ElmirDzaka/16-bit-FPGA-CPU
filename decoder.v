@@ -23,7 +23,14 @@ parameter [3:0] subi  = 4'b1001;
 
 always @(raw_instructions) begin
 	
-   if(raw_instructions[15:12] == addi) begin
+   if(raw_instructions[15:12] == subi) begin
+		opcode    = raw_instructions[15:12];
+      rdst      = raw_instructions[11:8];
+      immediate = raw_instructions[7:0];
+      flag_type = 4'b0010;
+	end
+	
+	else if(raw_instructions[15:12] == addi) begin
 		opcode    = raw_instructions[15:12];
       rdst      = raw_instructions[11:8];
       immediate = raw_instructions[7:0];
@@ -174,7 +181,7 @@ always @(raw_instructions) begin
 		  
 		  //Jump unconditional
 		  8'b01001110 : begin
-			rdst = 4'bx; // EQ
+			rdst = 4'b1110; // EQ
 			rsrc = 4'bx;	
 			immediate = raw_instructions[7:0];
 			flag_type = 4'b1000; // Jump 

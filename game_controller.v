@@ -1,7 +1,7 @@
 module game_controller(right, left, up, down, movement);
 
 input right, left, up, down; //Inputs from the buttons
-output reg[15:0] movement; //Type of movement the user wants
+output reg[15:0] movement = 0; //Type of movement the user wants
 
 //Dummy Values
 //Left = 1, Right = 2, Up = 3, Down = 4
